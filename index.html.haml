@@ -1,0 +1,235 @@
+!!!
+/
+  slidedeck: A modification of the Google IO 2012 HTML5 slide template
+  URL: https://github.com/rmcgibbo/slidedeck
+  
+  Based on https://github.com/francescolaffi/elastic-google-io-slides, and
+  ultimately:
+  
+  Google IO 2012 HTML5 Slide Template
+  Authors: Eric Bidelman <ebidel@gmail.com>
+  Luke Mahe <lukem@google.com>
+  URL: https://code.google.com/p/io-2012-slides
+%html
+  %head
+    %title Title of my presentation
+    %meta{charset: "utf-8"}
+    %meta{content: "chrome=1", "http-equiv" => "X-UA-Compatible"}
+    / <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    / <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    / This one seems to work all the time, but really small on ipad
+    / <meta name="viewport" content="initial-scale=0.4">
+    %meta{content: "yes", name: "apple-mobile-web-app-capable"}
+    %link{href: " http://www.stanford.edu/favicon.ico", rel: "shortcut icon"}
+    %link{href: "theme/css/default.css", media: "all", rel: "stylesheet"}
+    %link{href: "theme/css/custom.css", media: "all", rel: "stylesheet"}
+    %link{href: "theme/css/phone.css", media: "only screen and (max-device-width: 480px)", rel: "stylesheet"}
+    %base{target: "_blank"}
+    / This amazingness opens all links in a new tab.
+    %script{"data-main" => "js/slides", src: "js/require-1.0.8.min.js"}
+    / MathJax support
+    %script{type: "text/x-mathjax-config"}
+      MathJax.Hub.Config({
+      extensions: ["tex2jax.js"],
+      jax: ["input/TeX", "output/HTML-CSS"],
+      showProcessingMessages: false,
+      tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+      },
+      "HTML-CSS": { availableFonts: ["TeX"] }
+      });
+    %script{src: "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"}
+  %body{style: "opacity: 0"}
+    %slides.layout-widescreen
+      %slide.title-slide.segue
+        %hgroup
+          %h1 A Brief Guide to Computer Vision
+          %h2 &hellip; and its applications in traffic analysis
+          %p
+            Rich Wareham
+            %br
+            rjw57@cam.ac.uk,
+            %a{href: "https://gplus.to/richwareham"}
+              http://gplus.to/richwareham
+      %slide.segue.dark.nobackground
+        %hgroup
+          %h2 The Computer Vision Pipeline
+      %slide{style: "background-image: url(figures/vision-pipeline.svg); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+        %article.centered
+          / Work-around for https://code.google.com/p/chromium/issues/detail?id=170560
+          %div{style:"display: none"}
+            %embed{src: "figures/vision-pipeline.svg", height: "100%"}
+      %slide
+        %hgroup
+          %h2 The Tools
+        %article
+          %ul
+            %li
+              %a{href:"http://opencv.org/"} OpenCV
+              &mdash; Turn-key implementations of most `standard' algorithms
+            %li
+              %a{href:"http://python.org/"} Python
+              &mdash; The universal `glue' language
+            %li
+              %a{href:"http://ipython.org/"} IPython web notebook
+              &mdash; A scientist-friendly interface to Python
+            %li
+              %a{href:"http://www.numpy.org/"} NumPy/SciPy
+              &mdash; Number-crunching library for Python
+      %slide.segue.dark.nobackground
+        %hgroup
+          %h2 Example: ANPR
+          %h3 Automatic Number Plate Recognition
+      %slide{style: "background-image: url(figures/number-plate-input.jpg); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+        %article.build
+          %pre.prettyprint{"data-lang" => "python"}
+            :preserve
+              import cv2
+
+              im = cv2imread('number-plate.jpg')
+      %slide{style: "background-image: url(figures/number-plate-1-colour-difference.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+        %article.build
+          %pre.prettyprint.tobuild{"data-lang" => "python"}
+            :preserve
+              import numpy as np
+
+              # Create an entirely yellow image
+              yellow = np.ones(im.shape)
+              yellow[:,:,0] = 209     # red
+              yellow[:,:,1] = 169     # green
+              yellow[:,:,2] = 11      # blue          
+
+              # Compute difference
+              diff = np.abs(yellow - im)
+      %slide{style: "background-image: url(figures/number-plate-2-desaturate.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+        %article.build
+          %pre.prettyprint.tobuild{"data-lang" => "python"}
+            :preserve
+              # Destaurate by taking the mean of each colour
+              desat = np.mean(diff, axis=2)
+      %slide{style: "background-image: url(figures/number-plate-3-invert.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+        %article.build
+          %pre.prettyprint.tobuild{"data-lang" => "python"}
+            :preserve
+              desat_inv = 255 - desat
+      %slide{style: "background-image: url(figures/number-plate-4-threshold.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+        %article.build
+          %pre.prettyprint.tobuild{"data-lang" => "python"}
+            :preserve
+              desat_thresh = np.where(
+                np.logical_and(desat_inv > 150, desat_inv &lt; 200), 1, 0
+              )
+      %slide{style: "background-image: url(figures/number-plate-5-quad-fit.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+        %article.build
+          / %iframe{src: "http://opencv-code.com/tutorials/automatic-perspective-correction-for-quadrilateral-objects/"}
+      %slide
+        %hgroup
+          %h2 Quadrilateral fitting via OpenCV
+        %article
+          .centered
+            See
+            %a{href: "https://www.youtube.com/ytvO2dijZ7A"}
+              demo video on YouTube.
+      %slide{style: "background-image: url(figures/number-plate-6-warp.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+      %slide{style: "background-image: url(figures/number-plate-7-crop-invert.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+      %slide{style: "background-image: url(figures/number-plate-8-erode.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+        %article.build
+          %pre.prettyprint.tobuild{"data-lang" => "python"}
+            :preserve
+              eroded = cv2.erode(cropped)
+      %slide{style: "background-image: url(figures/number-plate-9-connected-segments.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+        %article.build
+          %pre.prettyprint.tobuild{"data-lang" => "python"}
+            :preserve
+              # Extract connected regions as vector contours
+              segment_contours = cv2.findContours(
+                eroded, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE
+              )
+      %slide{style: "background-image: url(figures/number-plate-10-model.svg); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+      %slide
+        %article
+          %img{src: "figures/number-plate-10-model.svg"}
+
+      %slide
+        %hgroup
+          %h2 Intro slide
+          %h3
+        %article
+          %p Here is a list that should build:
+          %ul.build
+            %li I like formulas, like this one $e=mc^2$
+            %li It's rendered using MathJax. You can change the settings by editing base.html if you like
+            %li pressing 'f' toggle fullscreen
+            %li pressing 'w' toggles widescreen
+            %li 'o' toggles overview mode
+      %slide.img-top-center
+        %hgroup
+          %h2 Slide with a figure
+          %h3 Subtitles are cool too
+        %article
+          %p
+            %img{height: "150", src: "figures/200px-6n-graf.svg.png"}
+          %ul
+            %li Some point to make about about this figure from wikipedia
+            %li This slide has a class that was defined in theme/css/custom.css
+          %footer.source Always cite your sources!
+      %slide.segue.dark.nobackground
+        / <aside class="gdbar"><img src="images/google_developers_icon_128.png"></aside>
+        %hgroup.auto-fadein
+          %h2 Segue slide
+          %h3 I can haz subtitlz?
+      %slide
+        %hgroup
+          %h2 Maybe some code?
+          %h3
+        %article
+          %p
+            press 'h' to highlight an important section (that is highlighted
+            with <b>...</b> tags)
+          %pre.prettyprint{"data-lang" => "javascript"}
+            function isSmall() {
+            return window.matchMedia("(min-device-width: ???)").matches;
+            }
+            %b
+              function hasTouch() {
+              return Modernizr.touch;
+              }
+            function detectFormFactor() {
+            var device = DESKTOP;
+            if (hasTouch()) {
+            device = isSmall() ? PHONE : TABLET;
+            }
+            return device;
+            }
+          
+            vim:sw=4:sts=4:et
+      %slide.thank-you-slide.segue.nobackground
+        / <aside class="gdbar right"><img src="images/google_developers_icon_128.png"></aside>
+        %article.flexbox.vleft.auto-fadein
+          %h2 Thanks everyone!
+          %p And especially these people:
+        %p.auto-fadein{"data-config-contact" => ""}
+          %span www
+          %a{href: "http://www.google.edu/"} website
+          %br
+          %span github
+          %a{href: "http://github.com"} username
+      %slide.backdrop
+    :javascript
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-XXXXXXXX-1']);
+      _gaq.push(['_trackPageview']);
+      
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    /[if IE]
+      <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+      <script>CFInstall.check({mode: 'overlay'});</script>
+
+/ vim:sw=2:sts=2:et
+
