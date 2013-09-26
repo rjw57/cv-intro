@@ -45,17 +45,38 @@
     %slides.layout-widescreen
       %slide.title-slide.segue
         %hgroup
-          %h1 A Brief Guide to Computer Vision
+          %h1 A Guide to Computer Vision
           %h2 &hellip; and its applications in traffic analysis
           %p
-            Rich Wareham
-            %br
+            Rich Wareham,
             rjw57@cam.ac.uk,
             %a{href: "https://gplus.to/richwareham"}
               http://gplus.to/richwareham
-      %slide.segue.dark.nobackground
+            %br
+            Slides:
+            %a{href: "https://github.com/rjw57/cv-intro"}
+              https://github.com/rjw57/cv-intro
+      %slide.nobackground
         %hgroup
-          %h2 The Computer Vision Pipeline
+          %h2 The Basics
+        %article
+          %p Some basic terminology:
+          %ul
+            %li
+              %b Image
+              Rectangular array of pixels index with an $x$ and $y$ co-ordinate
+            %li
+              %b Pixel
+              One or move values associated with an image location
+            %li
+              %b Filter
+              A process which transforms pixel values in images
+            %li
+              %b Feature
+              Some shape or location extracted from an image
+            %li
+              %b Descriptor
+              Some non-geometric property of a feature
       %slide{style: "background-image: url(figures/vision-pipeline.svg); background-size: contain; background-repeat: no-repeat; background-position: center;"}
         %article.centered
           / Work-around for https://code.google.com/p/chromium/issues/detail?id=170560
@@ -118,20 +139,15 @@
         %article.build
           %pre.prettyprint.tobuild{"data-lang" => "python"}
             :preserve
-              desat_thresh = np.where(
-                np.logical_and(desat_inv > 150, desat_inv &lt; 200), 1, 0
-              )
+              desat_thresh = np.where(desat_inv > 200), 1, 0)
       %slide{style: "background-image: url(figures/number-plate-5-quad-fit.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
         %article.build
           / %iframe{src: "http://opencv-code.com/tutorials/automatic-perspective-correction-for-quadrilateral-objects/"}
-      %slide
-        %hgroup
-          %h2 Quadrilateral fitting via OpenCV
-        %article
-          .centered
-            See
-            %a{href: "https://www.youtube.com/ytvO2dijZ7A"}
-              demo video on YouTube.
+          / %iframe{src: "http://jsfiddle.net/rjw57/A6Pgy/embedded/result,js,html,css/"}
+          /%p
+          /  See
+          /  %a{href: "https://www.youtube.com/ytvO2dijZ7A"}
+          /    demo video on YouTube.
       %slide{style: "background-image: url(figures/number-plate-6-warp.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
       %slide{style: "background-image: url(figures/number-plate-7-crop-invert.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
       %slide{style: "background-image: url(figures/number-plate-8-erode.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
