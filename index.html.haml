@@ -12,7 +12,7 @@
   URL: https://code.google.com/p/io-2012-slides
 %html
   %head
-    %title Title of my presentation
+    %title An Introduction to Computer Vision
     %meta{charset: "utf-8"}
     %meta{content: "chrome=1", "http-equiv" => "X-UA-Compatible"}
     / <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
@@ -47,41 +47,70 @@
         %hgroup
           %h1 A Guide to Computer Vision
           %h2 &hellip; and its applications in traffic analysis
-          %p
-            Rich Wareham,
-            rjw57@cam.ac.uk,
-            %a{href: "https://gplus.to/richwareham"}
-              http://gplus.to/richwareham
-            %br
-            Slides:
-            %a{href: "https://github.com/rjw57/cv-intro"}
-              https://github.com/rjw57/cv-intro
+          %p Rich Wareham, University of Cambridge
+      %slide.nobackground
+        %hgroup
+          %h2 The Aim of this Talk
+        %aside.note
+          %section
+            %p An overview and motivating examples, not an undergraduate
+            lecture. What tools do we use? Give some brief insight into what I
+            plan to do on the computer vision side of my project.
+      %slide.segue.dark.nobackground
+        %hgroup
+          %h2 The Basics
+      %slide.nobackground
+        %hgroup
+          %h2 The basic idea
+        %article
+          %p FIXME: diagram of human vision/artistry
+      %slide.nobackground
+        %hgroup
+          %h2 The basic idea
+        %article
+          %p FIXME: diagram of computer vision/rendering
       %slide.nobackground
         %hgroup
           %h2 The Basics
+        %aside.note
+          %section
+            %p Some basic terminology:
+            %ul
+              %li
+                %b Image
+                Rectangular array of pixels index with an $x$ and $y$ co-ordinate
+              %li
+                %b Pixel
+                One or move values associated with an image location
+              %li
+                %b Filter
+                A process which transforms pixel values in images
+      %slide{style: "background-image: url(figures/vision-pipeline.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+      %slide.nobackground
+        %hgroup
+          %h2 Filters
         %article
-          %p Some basic terminology:
-          %ul
-            %li
-              %b Image
-              Rectangular array of pixels index with an $x$ and $y$ co-ordinate
-            %li
-              %b Pixel
-              One or move values associated with an image location
-            %li
-              %b Filter
-              A process which transforms pixel values in images
-            %li
-              %b Feature
-              Some shape or location extracted from an image
-            %li
-              %b Descriptor
-              Some non-geometric property of a feature
-      %slide{style: "background-image: url(figures/vision-pipeline.svg); background-size: contain; background-repeat: no-repeat; background-position: center;"}
-        %article.centered
-          / Work-around for https://code.google.com/p/chromium/issues/detail?id=170560
-          %div{style:"display: none"}
-            %embed{src: "figures/vision-pipeline.svg", height: "100%"}
+          %p Pixel-to-pixel transform
+          %p Example: image gradent
+        %aside.note
+          %section
+            %p Draw example
+      %slide.nobackground
+        %hgroup
+          %h2 Detector
+        %article
+          %p Pixel-to-shape transform
+          %p Example: contour finding
+        %aside.note
+          %section
+            %p make sure to note problems with inner contours
+      %slide.nobackground
+        %hgroup
+          %h2 Template Matching
+          %h3 Example: shape matching
+        %aside.note
+          %section
+            %p Draw example A vs V
       %slide
         %hgroup
           %h2 The Tools
@@ -99,6 +128,12 @@
             %li
               %a{href:"http://www.numpy.org/"} NumPy/SciPy
               &mdash; Number-crunching library for Python
+      %slide
+        %hgroup
+          %h2 IPython demo
+        %aside.note
+          %section
+            %p Load from URL, convert to greyscale, DoG edge detector
       %slide.segue.dark.nobackground
         %hgroup
           %h2 Example: ANPR
@@ -163,86 +198,166 @@
               segment_contours = cv2.findContours(
                 eroded, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE
               )
-      %slide{style: "background-image: url(figures/number-plate-10-model.svg); background-size: contain; background-repeat: no-repeat; background-position: center;"}
-      %slide
-        %article
-          %img{src: "figures/number-plate-10-model.svg"}
-
+      %slide{style: "background-image: url(figures/number-plate-10-model.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
       %slide
         %hgroup
-          %h2 Intro slide
-          %h3
-        %article
-          %p Here is a list that should build:
-          %ul.build
-            %li I like formulas, like this one $e=mc^2$
-            %li It's rendered using MathJax. You can change the settings by editing base.html if you like
-            %li pressing 'f' toggle fullscreen
-            %li pressing 'w' toggles widescreen
-            %li 'o' toggles overview mode
-      %slide.img-top-center
-        %hgroup
-          %h2 Slide with a figure
-          %h3 Subtitles are cool too
-        %article
-          %p
-            %img{height: "150", src: "figures/200px-6n-graf.svg.png"}
-          %ul
-            %li Some point to make about about this figure from wikipedia
-            %li This slide has a class that was defined in theme/css/custom.css
-          %footer.source Always cite your sources!
+          %h2 Aside: Dutch number plate
+        %article.build
+          %p.centered
+            %img{src:'figures/Dutch_license_plate_segment.jpg', width:'60%'}
       %slide.segue.dark.nobackground
-        / <aside class="gdbar"><img src="images/google_developers_icon_128.png"></aside>
-        %hgroup.auto-fadein
-          %h2 Segue slide
-          %h3 I can haz subtitlz?
+        %hgroup
+          %h2 Feature detection
+          %h3 Fourier transform, wavelets and complex numbers, oh my!
       %slide
         %hgroup
-          %h2 Maybe some code?
-          %h3
+          %h2 Convolution
+        %article
+          %p.centered
+            %img{src:'figures/Convolution_of_spiky_function_with_box2.gif', width:'80%'}
+          %p.centered
+            %img{src:'figures/Convolution_of_box_signal_with_itself2.gif', width:'80%'}
+      %slide
+        %hgroup
+          %h2 Fourier Transform
+        %article
+          %p.centered
+            %img{src:'figures/Fourier_transform_time_and_frequency_domains.gif', width:'60%'}
+        %aside.note
+          %section
+            %p Outline FT. On tablet draw phase shift property. Compare with wavelets.
+      %slide{style: "background-image: url(figures/real-vs-complex-wt.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+      %slide{style: "background-image: url(figures/2d-complex-wt.png); background-size: contain; background-repeat: no-repeat; background-position: center;"}
+      %slide
+        %hgroup
+          %h2 Feature detection in video images
+        %aside.note
+          %p Video
+          %section
+            %p Show video
+      %slide
+        %hgroup
+          %h2 Polar matching
+        %article
+          %p.centered
+            %img{src:'figures/polar-matching.png', width:'50%'}
+      %slide
+        %hgroup
+          %h2 Descriptor matching in video
+        %aside.note
+          %p Video
+          %section
+            %p Show video
+      %slide.segue.dark.nobackground
+        %hgroup
+          %h2 Perspective warping
+          %h3.build
+            %span 
+              Here comes
+              %a{href:'https://www.youtube.com/watch?v=29Im23SPNok'} the science bit,
+            %span concentrate!
+      %slide
+        %hgroup
+          %h2 Perspective transformation
+          %h3 General case
+        %article
+          %p Map 3d co-ordinate $[x, y, z]$ to 2d co-ordinate $[X, Y]$
+          %p.centered
+            :preserve
+              $$
+              \underbrace{\begin{bmatrix}
+              XW \\\\ YW \\\\ W
+              \end{bmatrix}}_{3 \times 1}
+              =
+              \underbrace{P}_{3 \times 4}
+              \underbrace{\begin{bmatrix}
+              x \\\\ y \\\\ z \\\\ 1
+              \end{bmatrix}}_{4 \times 1}
+              $$
+      %slide
+        %hgroup
+          %h2 Perspective transformation
+          %h3 Planar case
+        %article
+          %p If source is a plane, without loss of generality we can ignore $z$
+          %p.centered
+            :preserve
+              $$
+              \begin{bmatrix}
+              XW \\\\ YW \\\\ W
+              \end{bmatrix}
+              =
+              \underbrace{\begin{bmatrix}
+              a & d & g \\\\
+              b & e & h \\\\
+              c & f & 1
+              \end{bmatrix}}_{\mbox{8 unknowns}}
+              \begin{bmatrix}
+              x \\\\ y \\\\ 1
+              \end{bmatrix}
+              $$
+      %slide
+        %article
+          %p.centered{style:'font-size:70%'}
+            :preserve
+              $$
+              \underbrace{\begin{bmatrix}
+              x_1 & 0 & -x_1X_1 & y_1 & 0 & -y_1X_1 & 1 & 0 \\\\
+              0 & x_1 & -x_1Y_1 & 0 & y_1 & -y_1Y_1 & 0 & 1 \\\\
+              x_2 & 0 & -x_2X_2 & y_2 & 0 & -y_2X_2 & 1 & 0 \\\\
+              0 & x_2 & -x_2Y_2 & 0 & y_2 & -y_2Y_2 & 0 & 1 \\\\
+              x_3 & 0 & -x_3X_3 & y_3 & 0 & -y_3X_3 & 1 & 0 \\\\
+              0 & x_3 & -x_3Y_3 & 0 & y_3 & -y_3Y_3 & 0 & 1 \\\\
+              x_4 & 0 & -x_4X_4 & y_4 & 0 & -y_4X_4 & 1 & 0 \\\\
+              0 & x_4 & -x_4Y_4 & 0 & y_4 & -y_4Y_4 & 0 & 1 \\\\
+              \end{bmatrix}}_{A}
+              \underbrace{\begin{bmatrix}
+              a\\\\b\\\\c\\\\d\\\\e\\\\f\\\\g\\\\h
+              \end{bmatrix}}_{\vec{v}}
+              =
+              \underbrace{\begin{bmatrix}
+              X_1\\\\Y_1\\\\
+              X_2\\\\Y_2\\\\
+              X_3\\\\Y_3\\\\
+              X_4\\\\Y_4
+              \end{bmatrix}}_{\vec{u}}
+              $$
+      %slide
+        %hgroup
+          %h2 Planar homography
+        %article
+          %p Find transform coefficients from image co-ordinates and template co-ordinates
+          %p $$ \vec{v} = A^{-1} \vec{u} $$
+      %slide
+        %hgroup
+          %h2 Homography: an example
         %article
           %p
-            press 'h' to highlight an important section (that is highlighted
-            with <b>...</b> tags)
-          %pre.prettyprint{"data-lang" => "javascript"}
-            function isSmall() {
-            return window.matchMedia("(min-device-width: ???)").matches;
-            }
-            %b
-              function hasTouch() {
-              return Modernizr.touch;
-              }
-            function detectFormFactor() {
-            var device = DESKTOP;
-            if (hasTouch()) {
-            device = isSmall() ? PHONE : TABLET;
-            }
-            return device;
-            }
-          
-            vim:sw=4:sts=4:et
+            %a{href:'http://jsfiddle.net/rjw57/A6Pgy/'} WebGL perspective transformation
+            (JSFiddle)
+      %slide
+        %hgroup
+          %h2 Joining it all together
+        %article
+          %p
+            %a{href:'https://www.youtube.com/watch?v=-ZNYoL8rzPY'} Planar Object Tracking
       %slide.thank-you-slide.segue.nobackground
         / <aside class="gdbar right"><img src="images/google_developers_icon_128.png"></aside>
         %article.flexbox.vleft.auto-fadein
-          %h2 Thanks everyone!
-          %p And especially these people:
+          %h2 Thanks for watching
+          %p
+            Slides available at
+            %a{href:'https://rjw57.github.io/cv-intro'} rjw57.github.io/cv-intro
         %p.auto-fadein{"data-config-contact" => ""}
-          %span www
-          %a{href: "http://www.google.edu/"} website
+          %span g+
+          %a{href: "http://gplus.to/richwareham"} gplus.to/richwareham
+          %br
+          %span email
+          %span rjw57@cam.ac.uk
           %br
           %span github
-          %a{href: "http://github.com"} username
+          %a{href: "http://github.com/rjw57"} github.com/rjw57
       %slide.backdrop
-    :javascript
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-XXXXXXXX-1']);
-      _gaq.push(['_trackPageview']);
-      
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
     /[if IE]
       <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
       <script>CFInstall.check({mode: 'overlay'});</script>
