@@ -79,7 +79,7 @@ SlideDeck.prototype.onDomLoaded_ = function(e) {
     this.container.classList.remove('layout-widescreen');
   }
 
-  this.loadConfig_();
+  this.loadConfig_(SLIDE_CONFIG);
   this.addEventListeners_();
   this.updateSlides_();
 
@@ -102,13 +102,16 @@ SlideDeck.prototype.onDomLoaded_ = function(e) {
 
   // Note: this needs to come after addEventListeners_(), which adds a
   // 'keydown' listener that this controller relies on.
-  // Also, no need to set this up if we're on mobile.
-  if (!Modernizr.touch) {
+
+  // Modernizr.touch isn't a sufficient check for devices that support both
+  // touch and mouse. Create the controller in all cases.
+  // // Also, no need to set this up if we're on mobile.
+  // if (!Modernizr.touch) {
     this.controller = new SlideController(this);
     if (this.controller.isPopup) {
       document.body.classList.add('popup');
     }
-  }
+  //}
 };
 
 /**
@@ -285,51 +288,136 @@ SlideDeck.prototype.toggleOverview = function() {
  * @private
  */
 SlideDeck.prototype.loadConfig_ = function(config) {
-  var fonts = [
-      'Open Sans:regular,semibold,italic,italicsemibold',
-      'Source Code Pro'
-   ];
-  
+  if (!config) {
+    return;
+  }
 
-  this.loadTheme_([]);
+  this.config_ = config;
 
+  var settings = this.config_.settings;
+
+  this.loadTheme_(settings.theme || []);
+
+  if (settings.favIcon) {
+    this.addFavIcon_(settings.favIcon);
+  }
 
   // Prettyprint. Default to on.
+  if (!!!('usePrettify' in settings) || settings.usePrettify) {
+    prettyPrint();
+  }
+
+  if (settings.analytics) {
+    this.loadAnalytics_();
+  }
+
+  if (settings.fonts) {
+    this.addFonts_(settings.fonts);
+  }
+
   // Builds. Default to on.
-  // add the default fonts
-  prettyPrint();
-  this.makeBuildLists_();
-  this.addFonts_(fonts);
-  
-  /* Left/Right tap areas. Default to including. */
-  var el = document.createElement('div');
-  el.classList.add('slide-area');
-  el.id = 'prev-slide-area';
-  el.addEventListener('click', this.prevSlide.bind(this), false);
-  this.container.appendChild(el);
+  if (!!!('useBuilds' in settings) || settings.useBuilds) {
+    this.makeBuildLists_();
+  }
 
-  var el = document.createElement('div');
-  el.classList.add('slide-area');
-  el.id = 'next-slide-area';
-  el.addEventListener('click', this.nextSlide.bind(this), false);
-  this.container.appendChild(el);
-
-  // enable touch
-  var self = this;
-
-  // Note: this prevents mobile zoom in/out but prevents iOS from doing
-  // it's crazy scroll over effect and disaligning the slides.
-  window.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-  }, false);
-
-  var hammer = new Hammer(this.container);
-  hammer.ondragend = function(e) {
-    if (e.direction == 'right' || e.direction == 'down') {
-      self.prevSlide();
-    } else if (e.direction == 'left' || e.direction == 'up') {
-      self.nextSlide();
+  if (settings.title) {
+    document.title = settings.title.replace(/<br\/?>/, ' ');
+    if (settings.eventInfo && settings.eventInfo.title) {
+      document.title +=  ' - ' + settings.eventInfo.title;
     }
+    document.querySelector('[data-config-title]').innerHTML = settings.title;
+  }
+
+  if (settings.subtitle) {
+    document.querySelector('[data-config-subtitle]').innerHTML = settings.subtitle;
+  }
+
+  if (this.config_.presenters) {
+    var presenters = this.config_.presenters;
+    var dataConfigContact = document.querySelector('[data-config-contact]');
+
+    var html = [];
+    if (presenters.length == 1) {
+      var p = presenters[0];
+
+      var presenterTitle = [p.name];
+      if (p.company) {
+        presenterTitle.push(p.company);
+      }
+      html = presenterTitle.join(' - ') + '<br>';
+
+      var gplus = p.gplus ? '<span>g+</span><a href="' + p.gplus +
+          '">' + p.gplus.replace(/https?:\/\//, '') + '</a>' : '';
+
+      var twitter = p.twitter ? '<span>twitter</span>' +
+          '<a href="http://twitter.com/' + p.twitter + '">' +
+          p.twitter + '</a>' : '';
+
+      var www = p.www ? '<span>www</span><a href="' + p.www +
+                        '">' + p.www.replace(/https?:\/\//, '') + '</a>' : '';
+
+      var github = p.github ? '<span>github</span><a href="' + p.github +
+          '">' + p.github.replace(/https?:\/\//, '') + '</a>' : '';
+
+      var html2 = [gplus, twitter, www, github].join('<br>');
+
+      if (dataConfigContact) {
+        dataConfigContact.innerHTML = html2;
+      }
+    } else {
+      for (var i = 0, p; p = presenters[i]; ++i) {
+        html.push(p.name + ' - ' + p.company);
+      }
+      html = html.join('<br>');
+      if (dataConfigContact) {
+        dataConfigContact.innerHTML = html;
+      }
+    }
+
+    var dataConfigPresenter = document.querySelector('[data-config-presenter]');
+    if (dataConfigPresenter) {
+      dataConfigPresenter.innerHTML = html;
+      if (settings.eventInfo) {
+        var date = settings.eventInfo.date;
+        var dateInfo = date ? ' - <time>' + date + '</time>' : '';
+        dataConfigPresenter.innerHTML += settings.eventInfo.title + dateInfo;
+      }
+    }
+  }
+
+  /* Left/Right tap areas. Default to including. */
+  if (!!!('enableSlideAreas' in settings) || settings.enableSlideAreas) {
+    var el = document.createElement('div');
+    el.classList.add('slide-area');
+    el.id = 'prev-slide-area';
+    el.addEventListener('click', this.prevSlide.bind(this), false);
+    this.container.appendChild(el);
+
+    var el = document.createElement('div');
+    el.classList.add('slide-area');
+    el.id = 'next-slide-area';
+    el.addEventListener('click', this.nextSlide.bind(this), false);
+    this.container.appendChild(el);
+  }
+
+  if (Modernizr.touch && (!!!('enableTouch' in settings) ||
+      settings.enableTouch)) {
+    var self = this;
+
+    // Note: this prevents mobile zoom in/out but prevents iOS from doing
+    // it's crazy scroll over effect and disaligning the slides.
+    window.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+    }, false);
+
+    var hammer = new Hammer(this.container);
+    hammer.ondragend = function(e) {
+      if (e.direction == 'right' || e.direction == 'down') {
+        self.prevSlide();
+      } else if (e.direction == 'left' || e.direction == 'up') {
+        self.nextSlide();
+      }
+    };
   }
 };
 
@@ -630,6 +718,19 @@ SlideDeck.prototype.updateHash_ = function(dontPush) {
   }
 };
 
+
+/**
+ * @private
+ * @param {string} favIcon
+ */
+SlideDeck.prototype.addFavIcon_ = function(favIcon) {
+  var el = document.createElement('link');
+  el.rel = 'icon';
+  el.type = 'image/png';
+  el.href = favIcon;
+  document.querySelector('head').appendChild(el);
+};
+
 /**
  * @private
  * @param {string} theme
@@ -655,11 +756,26 @@ SlideDeck.prototype.loadTheme_ = function(theme) {
   }
 };
 
+/**
+ * @private
+ */
+SlideDeck.prototype.loadAnalytics_ = function() {
+  var _gaq = window['_gaq'] || [];
+  _gaq.push(['_setAccount', this.config_.settings.analytics]);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+};
+
 
 // Polyfill missing APIs (if we need to), then create the slide deck.
 // iOS < 5 needs classList, dataset, and window.matchMedia. Modernizr contains
 // the last one.
-var initSlideDeck = function() {
+(function() {
   Modernizr.load({
     test: !!document.body.classList && !!document.body.dataset,
     nope: ['js/polyfills/classList.min.js', 'js/polyfills/dataset.min.js'],
@@ -667,11 +783,4 @@ var initSlideDeck = function() {
       window.slidedeck = new SlideDeck();
     }
   });
-}
-// make sure that the slidedeck only gets created when the document is
-// ready.
-if (document.readyState === "complete") {
-  initSlideDeck();
-} else {
-  window.addEventListener("load", initSlideDeck);
-}
+})();
