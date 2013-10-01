@@ -11,7 +11,7 @@ PNGS_FROM_SVGS := $(patsubst %.svg,%.png,$(wildcard figures/*.svg))
 figures: ${PNGS_FROM_SVGS}
 
 github: all ${OUTDIR}
-	cp index.html "${OUTDIR}"
+	cp index.html slide_config.js "${OUTDIR}"
 	cp -r figures/ js/ theme/ "${OUTDIR}"
 	ghp-import -n ${OUTDIR}
 	git push origin gh-pages:gh-pages
