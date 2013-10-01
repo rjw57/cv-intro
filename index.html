@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<!--
+  slidedeck: A modification of the Google IO 2012 HTML5 slide template
+  URL: https://github.com/rmcgibbo/slidedeck
+  Based on https://github.com/francescolaffi/elastic-google-io-slides, and
+  ultimately:
+  Google IO 2012 HTML5 Slide Template
+  Authors: Eric Bidelman <ebidel@gmail.com>
+  Luke Mahe <lukem@google.com>
+  URL: https://code.google.com/p/io-2012-slides
+-->
+<html>
+  <head>
+    <title>An Introduction to Computer Vision</title>
+    <meta charset='utf-8'>
+    <meta content='chrome=1' http-equiv='X-UA-Compatible'>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0"> -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <!-- This one seems to work all the time, but really small on ipad -->
+    <!-- <meta name="viewport" content="initial-scale=0.4"> -->
+    <meta content='yes' name='apple-mobile-web-app-capable'>
+    <link href=' http://www.stanford.edu/favicon.ico' rel='shortcut icon'>
+    <link href='theme/css/default.css' media='all' rel='stylesheet'>
+    <link href='theme/css/custom.css' media='all' rel='stylesheet'>
+    <link href='theme/css/phone.css' media='only screen and (max-device-width: 480px)' rel='stylesheet'>
+    <base target='_blank'>
+    <!-- This amazingness opens all links in a new tab. -->
+    <script data-main='js/slides' src='js/require-1.0.8.min.js'></script>
+    <!-- MathJax support -->
+    <script type='text/x-mathjax-config'>
+      MathJax.Hub.Config({
+      extensions: ["tex2jax.js"],
+      jax: ["input/TeX", "output/HTML-CSS"],
+      showProcessingMessages: false,
+      tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+      },
+      "HTML-CSS": { availableFonts: ["TeX"] }
+      });
+    </script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+  </head>
+  <body style='opacity: 0'>
+    <slides class='layout-widescreen'>
+      <slide class='title-slide segue'>
+        <hgroup>
+          <h1>A Guide to Computer Vision</h1>
+          <h2>&hellip; and its applications in traffic analysis</h2>
+          <p>Rich Wareham, University of Cambridge</p>
+        </hgroup>
+      </slide>
+      <slide class='nobackground'>
+        <hgroup>
+          <h2>The Aim of this Talk</h2>
+        </hgroup>
+        <aside class='note'>
+          <section>
+            <p>An overview and motivating examples, not an undergraduate</p>
+            lecture. What tools do we use? Give some brief insight into what I
+            plan to do on the computer vision side of my project.
+          </section>
+        </aside>
+      </slide>
+      <slide class='segue dark nobackground'>
+        <hgroup>
+          <h2>The Basics</h2>
+        </hgroup>
+      </slide>
+      <slide class='nobackground'>
+        <hgroup>
+          <h2>The basic idea</h2>
+        </hgroup>
+        <article>
+          <p>FIXME: diagram of human vision/artistry</p>
+        </article>
+      </slide>
+      <slide class='nobackground'>
+        <hgroup>
+          <h2>The basic idea</h2>
+        </hgroup>
+        <article>
+          <p>FIXME: diagram of computer vision/rendering</p>
+        </article>
+      </slide>
+      <slide class='nobackground'>
+        <hgroup>
+          <h2>The Basics</h2>
+        </hgroup>
+        <aside class='note'>
+          <section>
+            <p>Some basic terminology:</p>
+            <ul>
+              <li>
+                <b>Image</b>
+                Rectangular array of pixels index with an $x$ and $y$ co-ordinate
+              </li>
+              <li>
+                <b>Pixel</b>
+                One or move values associated with an image location
+              </li>
+              <li>
+                <b>Filter</b>
+                A process which transforms pixel values in images
+              </li>
+            </ul>
+          </section>
+        </aside>
+      </slide>
+      <slide style='background-image: url(figures/vision-pipeline.png); background-size: contain; background-repeat: no-repeat; background-position: center;'></slide>
+      <slide class='nobackground'>
+        <hgroup>
+          <h2>Filters</h2>
+        </hgroup>
+        <article>
+          <p>Pixel-to-pixel transform</p>
+          <p>Example: image gradent</p>
+        </article>
+        <aside class='note'>
+          <section>
+            <p>Draw example</p>
+          </section>
+        </aside>
+      </slide>
+      <slide class='nobackground'>
+        <hgroup>
+          <h2>Detector</h2>
+        </hgroup>
+        <article>
+          <p>Pixel-to-shape transform</p>
+          <p>Example: contour finding</p>
+        </article>
+        <aside class='note'>
+          <section>
+            <p>make sure to note problems with inner contours</p>
+          </section>
+        </aside>
+      </slide>
+      <slide class='nobackground'>
+        <hgroup>
+          <h2>Template Matching</h2>
+          <h3>Example: shape matching</h3>
+        </hgroup>
+        <aside class='note'>
+          <section>
+            <p>Draw example A vs V</p>
+          </section>
+        </aside>
+      </slide>
+      <slide>
+        <hgroup>
+          <h2>The Tools</h2>
+        </hgroup>
+        <article>
+          <ul>
+            <li>
+              <a href='http://opencv.org/'>OpenCV</a>
+              &mdash; Turn-key implementations of most `standard' algorithms
+            </li>
+            <li>
+              <a href='http://python.org/'>Python</a>
+              &mdash; The universal `glue' language
+            </li>
+            <li>
+              <a href='http://ipython.org/'>IPython web notebook</a>
+              &mdash; A scientist-friendly interface to Python
+            </li>
+            <li>
+              <a href='http://www.numpy.org/'>NumPy/SciPy</a>
+              &mdash; Number-crunching library for Python
+            </li>
+          </ul>
+        </article>
+      </slide>
+      <slide>
+        <hgroup>
+          <h2>IPython demo</h2>
+        </hgroup>
+        <aside class='note'>
+          <section>
+            <p>Load from URL, convert to greyscale, DoG edge detector</p>
+          </section>
+        </aside>
+      </slide>
+      <slide class='segue dark nobackground'>
+        <hgroup>
+          <h2>Example: ANPR</h2>
+          <h3>Automatic Number Plate Recognition</h3>
+        </hgroup>
+      </slide>
+      <slide style='background-image: url(figures/number-plate-input.jpg); background-size: contain; background-repeat: no-repeat; background-position: center;'>
+        <article class='build'>
+          <pre class='prettyprint' data-lang='python'>import cv2&#x000A;&#x000A;im = cv2imread('number-plate.jpg')</pre>
+        </article>
+      </slide>
+      <slide style='background-image: url(figures/number-plate-1-colour-difference.png); background-size: contain; background-repeat: no-repeat; background-position: center;'>
+        <article class='build'>
+          <pre class='prettyprint tobuild' data-lang='python'>import numpy as np&#x000A;&#x000A;# Create an entirely yellow image&#x000A;yellow = np.ones(im.shape)&#x000A;yellow[:,:,0] = 209     # red&#x000A;yellow[:,:,1] = 169     # green&#x000A;yellow[:,:,2] = 11      # blue          &#x000A;&#x000A;# Compute difference&#x000A;diff = np.abs(yellow - im)</pre>
+        </article>
+      </slide>
+      <slide style='background-image: url(figures/number-plate-2-desaturate.png); background-size: contain; background-repeat: no-repeat; background-position: center;'>
+        <article class='build'>
+          <pre class='prettyprint tobuild' data-lang='python'># Destaurate by taking the mean of each colour&#x000A;desat = np.mean(diff, axis=2)</pre>
+        </article>
+      </slide>
+      <slide style='background-image: url(figures/number-plate-3-invert.png); background-size: contain; background-repeat: no-repeat; background-position: center;'>
+        <article class='build'>
+          <pre class='prettyprint tobuild' data-lang='python'>desat_inv = 255 - desat</pre>
+        </article>
+      </slide>
+      <slide style='background-image: url(figures/number-plate-4-threshold.png); background-size: contain; background-repeat: no-repeat; background-position: center;'>
+        <article class='build'>
+          <pre class='prettyprint tobuild' data-lang='python'>desat_thresh = np.where(desat_inv > 200), 1, 0)</pre>
+        </article>
+      </slide>
+      <slide style='background-image: url(figures/number-plate-5-quad-fit.png); background-size: contain; background-repeat: no-repeat; background-position: center;'>
+        <article class='build'>
+          <!-- %iframe{src: "http://opencv-code.com/tutorials/automatic-perspective-correction-for-quadrilateral-objects/"} -->
+          <!-- %iframe{src: "http://jsfiddle.net/rjw57/A6Pgy/embedded/result,js,html,css/"} -->
+          <!-- %p -->
+          <!-- See -->
+          <!-- %a{href: "https://www.youtube.com/ytvO2dijZ7A"} -->
+          <!-- demo video on YouTube. -->
+        </article>
+      </slide>
+      <slide style='background-image: url(figures/number-plate-6-warp.png); background-size: contain; background-repeat: no-repeat; background-position: center;'></slide>
+      <slide style='background-image: url(figures/number-plate-7-crop-invert.png); background-size: contain; background-repeat: no-repeat; background-position: center;'></slide>
+      <slide style='background-image: url(figures/number-plate-8-erode.png); background-size: contain; background-repeat: no-repeat; background-position: center;'>
+        <article class='build'>
+          <pre class='prettyprint tobuild' data-lang='python'>eroded = cv2.erode(cropped)</pre>
+        </article>
+      </slide>
+      <slide style='background-image: url(figures/number-plate-9-connected-segments.png); background-size: contain; background-repeat: no-repeat; background-position: center;'>
+        <article class='build'>
+          <pre class='prettyprint tobuild' data-lang='python'># Extract connected regions as vector contours&#x000A;segment_contours = cv2.findContours(&#x000A;  eroded, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE&#x000A;)</pre>
+        </article>
+      </slide>
+      <slide style='background-image: url(figures/number-plate-10-model.png); background-size: contain; background-repeat: no-repeat; background-position: center;'></slide>
+      <slide>
+        <hgroup>
+          <h2>Aside: Dutch number plate</h2>
+        </hgroup>
+        <article class='build'>
+          <p class='centered'>
+            <img src='figures/Dutch_license_plate_segment.jpg' width='60%'>
+          </p>
+        </article>
+      </slide>
+      <slide class='segue dark nobackground'>
+        <hgroup>
+          <h2>Feature detection</h2>
+          <h3>Fourier transform, wavelets and complex numbers, oh my!</h3>
+        </hgroup>
+      </slide>
+      <slide>
+        <hgroup>
+          <h2>Convolution</h2>
+        </hgroup>
+        <article>
+          <p class='centered'>
+            <img src='figures/Convolution_of_spiky_function_with_box2.gif' width='80%'>
+          </p>
+          <p class='centered'>
+            <img src='figures/Convolution_of_box_signal_with_itself2.gif' width='80%'>
+          </p>
+        </article>
+      </slide>
+      <slide>
+        <hgroup>
+          <h2>Fourier Transform</h2>
+        </hgroup>
+        <article>
+          <p class='centered'>
+            <img src='figures/Fourier_transform_time_and_frequency_domains.gif' width='60%'>
+          </p>
+        </article>
+        <aside class='note'>
+          <section>
+            <p>Outline FT. On tablet draw phase shift property. Compare with wavelets.</p>
+          </section>
+        </aside>
+      </slide>
+      <slide style='background-image: url(figures/real-vs-complex-wt.png); background-size: contain; background-repeat: no-repeat; background-position: center;'></slide>
+      <slide style='background-image: url(figures/2d-complex-wt.png); background-size: contain; background-repeat: no-repeat; background-position: center;'></slide>
+      <slide>
+        <hgroup>
+          <h2>Feature detection in video images</h2>
+        </hgroup>
+        <aside class='note'>
+          <p>Video</p>
+          <section>
+            <p>Show video</p>
+          </section>
+        </aside>
+      </slide>
+      <slide>
+        <hgroup>
+          <h2>Polar matching</h2>
+        </hgroup>
+        <article>
+          <p class='centered'>
+            <img src='figures/polar-matching.png' width='50%'>
+          </p>
+        </article>
+      </slide>
+      <slide>
+        <hgroup>
+          <h2>Descriptor matching in video</h2>
+        </hgroup>
+        <aside class='note'>
+          <p>Video</p>
+          <section>
+            <p>Show video</p>
+          </section>
+        </aside>
+      </slide>
+      <slide class='segue dark nobackground'>
+        <hgroup>
+          <h2>Perspective warping</h2>
+          <h3 class='build'>
+            <span>
+              Here comes
+              <a href='https://www.youtube.com/watch?v=29Im23SPNok'>the science bit,</a>
+            </span>
+            <span>concentrate!</span>
+          </h3>
+        </hgroup>
+      </slide>
+      <slide>
+        <hgroup>
+          <h2>Perspective transformation</h2>
+          <h3>General case</h3>
+        </hgroup>
+        <article>
+          <p>Map 3d co-ordinate $[x, y, z]$ to 2d co-ordinate $[X, Y]$</p>
+          <p class='centered'>
+            $$&#x000A;\underbrace{\begin{bmatrix}&#x000A;XW \\\\ YW \\\\ W&#x000A;\end{bmatrix}}_{3 \times 1}&#x000A;=&#x000A;\underbrace{P}_{3 \times 4}&#x000A;\underbrace{\begin{bmatrix}&#x000A;x \\\\ y \\\\ z \\\\ 1&#x000A;\end{bmatrix}}_{4 \times 1}&#x000A;$$
+          </p>
+        </article>
+      </slide>
+      <slide>
+        <hgroup>
+          <h2>Perspective transformation</h2>
+          <h3>Planar case</h3>
+        </hgroup>
+        <article>
+          <p>If source is a plane, without loss of generality we can ignore $z$</p>
+          <p class='centered'>
+            $$&#x000A;\begin{bmatrix}&#x000A;XW \\\\ YW \\\\ W&#x000A;\end{bmatrix}&#x000A;=&#x000A;\underbrace{\begin{bmatrix}&#x000A;a & d & g \\\\&#x000A;b & e & h \\\\&#x000A;c & f & 1&#x000A;\end{bmatrix}}_{\mbox{8 unknowns}}&#x000A;\begin{bmatrix}&#x000A;x \\\\ y \\\\ 1&#x000A;\end{bmatrix}&#x000A;$$
+          </p>
+        </article>
+      </slide>
+      <slide>
+        <article>
+          <p class='centered' style='font-size:70%'>
+            $$&#x000A;\underbrace{\begin{bmatrix}&#x000A;x_1 & 0 & -x_1X_1 & y_1 & 0 & -y_1X_1 & 1 & 0 \\\\&#x000A;0 & x_1 & -x_1Y_1 & 0 & y_1 & -y_1Y_1 & 0 & 1 \\\\&#x000A;x_2 & 0 & -x_2X_2 & y_2 & 0 & -y_2X_2 & 1 & 0 \\\\&#x000A;0 & x_2 & -x_2Y_2 & 0 & y_2 & -y_2Y_2 & 0 & 1 \\\\&#x000A;x_3 & 0 & -x_3X_3 & y_3 & 0 & -y_3X_3 & 1 & 0 \\\\&#x000A;0 & x_3 & -x_3Y_3 & 0 & y_3 & -y_3Y_3 & 0 & 1 \\\\&#x000A;x_4 & 0 & -x_4X_4 & y_4 & 0 & -y_4X_4 & 1 & 0 \\\\&#x000A;0 & x_4 & -x_4Y_4 & 0 & y_4 & -y_4Y_4 & 0 & 1 \\\\&#x000A;\end{bmatrix}}_{A}&#x000A;\underbrace{\begin{bmatrix}&#x000A;a\\\\b\\\\c\\\\d\\\\e\\\\f\\\\g\\\\h&#x000A;\end{bmatrix}}_{\vec{v}}&#x000A;=&#x000A;\underbrace{\begin{bmatrix}&#x000A;X_1\\\\Y_1\\\\&#x000A;X_2\\\\Y_2\\\\&#x000A;X_3\\\\Y_3\\\\&#x000A;X_4\\\\Y_4&#x000A;\end{bmatrix}}_{\vec{u}}&#x000A;$$
+          </p>
+        </article>
+      </slide>
+      <slide>
+        <hgroup>
+          <h2>Planar homography</h2>
+        </hgroup>
+        <article>
+          <p>Find transform coefficients from image co-ordinates and template co-ordinates</p>
+          <p>$$ \vec{v} = A^{-1} \vec{u} $$</p>
+        </article>
+      </slide>
+      <slide>
+        <hgroup>
+          <h2>Homography: an example</h2>
+        </hgroup>
+        <article>
+          <p>
+            <a href='http://jsfiddle.net/rjw57/A6Pgy/'>WebGL perspective transformation</a>
+            (JSFiddle)
+          </p>
+        </article>
+      </slide>
+      <slide>
+        <hgroup>
+          <h2>Joining it all together</h2>
+        </hgroup>
+        <article>
+          <p>
+            <a href='https://www.youtube.com/watch?v=-ZNYoL8rzPY'>Planar Object Tracking</a>
+          </p>
+        </article>
+      </slide>
+      <slide class='thank-you-slide segue nobackground'>
+        <!-- <aside class="gdbar right"><img src="images/google_developers_icon_128.png"></aside> -->
+        <article class='flexbox vleft auto-fadein'>
+          <h2>Thanks for watching</h2>
+          <p>
+            Slides available at
+            <a href='https://rjw57.github.io/cv-intro'>rjw57.github.io/cv-intro</a>
+          </p>
+        </article>
+        <p class='auto-fadein' data-config-contact=''>
+          <span>g+</span>
+          <a href='http://gplus.to/richwareham'>gplus.to/richwareham</a>
+          <br>
+          <span>email</span>
+          <span>rjw57@cam.ac.uk</span>
+          <br>
+          <span>github</span>
+          <a href='http://github.com/rjw57'>github.com/rjw57</a>
+        </p>
+      </slide>
+      <slide class='backdrop'></slide>
+    </slides>
+    <!--[if IE]>
+      <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+      <script>CFInstall.check({mode: 'overlay'});</script>
+    <![endif]-->
+  </body>
+</html>
+<!-- vim:sw=2:sts=2:et -->
